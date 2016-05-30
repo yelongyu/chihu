@@ -12,7 +12,7 @@
         <div class="page-header">
            <h1>welcome to ChiHu.</h1>
            <h2>
-            <p>hello, {% if known %}{{ name }}.{% else %}stranger.{% endif %}
+            <p>hello, {% if known %}{{ name }}.{% else %}stranger.{% endif %}</p>
            </h2>
         </div>
     </div>
@@ -23,7 +23,7 @@
 
     {% for user in users %}
         <ul>
-            <li><h2>{{ user.username }}</h2></li>
+            <li><h2>{{ user.username|safe }}</h2></li>
             <li><h2>{{ user.message }}</h2></li>
         </ul>
     {% endfor %}
