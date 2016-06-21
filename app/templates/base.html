@@ -7,6 +7,29 @@
         {{ super() }}
         <link rel="shortcut icon" href="{{ url_for('static', filename='chihu.ico') }}" type="image/x-icon" />
         <link rel="icon" href="{{ url_for('static', filename='chihu.ico') }}" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+        <style>
+            body {
+               /* background-color: #72d4e6;
+                */
+                font-family: Monospaced, 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+            }
+
+            .footer {
+                height: 100px;
+                background-color: lightslategrey;
+                text-align: center;
+                margin-bottom: -20;
+                padding: 30px;
+                display: block;
+                overflow: auto;
+            }
+
+            .self-profile img {
+                width: 150px;
+                height: 150px;
+            }
+        </style>
     {% endblock %}
 
     {% block navbar %}
@@ -14,15 +37,14 @@
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" 
-                        data-toggle="collapse" data-target= \
+                        data-toggle="collapse" data-target=
                         ".navbar-collapse">	                    				
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-            
+                        <span class="icon-bar"></span
                     </button>
-                    <a class="navbar-brand" href="/">ChiHu</a>
+                    <a class="navbar-brand" href="/">Chihu</a>
                 </div>
 
                 <div class="navbar-collapse collapse" >
@@ -30,8 +52,30 @@
                         <li><a href="/">Home</a></li>
                     </ul>
                     <ul class="nav navbar-nav">
-                        <li><a href='/login'{# {{ url_for('login', _external=True) }} #}>Login</a></li>
+                        <li><a href={{ url_for('main.download') }}>Download</a></li>
+                    </ul>
 
+                    {% if not current_user.is_authenticated %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ url_for('main.about_me') }}">About Me</a></li>
+                    </ul>
+                    {%  endif %}
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                        {% if current_user.is_authenticated %}
+                               <img src={{ current_user.gravatar() }}/>
+                                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ current_user.username }}
+                            <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href={{ url_for('main.user_profile', username=current_user.username) }}>资料</a></li>
+                                <li><a href={{ url_for('auth.update_profile') }}>设置</a></li>
+                                <li><a href={{ url_for('auth.logout', _external=True) }} >注销</a></li>
+                            </ul>
+                        {% else %}
+                                <li><a href={{ url_for('auth.login') }}>Login</a></li>
+                        {% endif %}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -39,17 +83,37 @@
     {% endblock %}
         
     {% block content %}
-        <div class="container">
+        <div class="container-message">
             {% for message in get_flashed_messages() %}
             <div class="alert alert-warning">
                 <button type="button" class="close" data-dismiss="alert">*</button>
                 {{ message }}
             </div>
             {% endfor %}
+        </div>
+        <div class="header">
+            {% block page_header %}
+            {% endblock %}
+        </div>
+        <div class="container">
+        <div class="row">
+             <div class="col-sm-9">
+            {% block page_content %}
+            {% endblock %}
+            </div>
 
-        {% block page_content %}
-        {% endblock %}
-
+             <div class="col-sm-3">
+                 <div class="self-profile">
+                     <h4>关于作者</h4>
+                    <img src="https://simuraepona.herokuapp.com/static/myself.png" />
+                     <span><h4>yelongyu</h4><span>
+                    <p>新手程序员，跑步爱好者。</p>
+                         <hr />
+                         To be a programmer.
+                         <hr />
+                 </div>
+             </div>
+        </div>
         </div>
     {% endblock %}
 

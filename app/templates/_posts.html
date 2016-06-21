@@ -1,0 +1,39 @@
+    <div class="posts_container">
+        <ul class="posts">
+            {% for post in posts %}
+                <div class="post_roll">
+                <li class="post">
+                    <div class="post-thumbnail">
+                        <a href={{ url_for('main.user_profile', username=current_user.username) }}>
+                            <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
+                        </a>
+                        <a href="{{ url_for('main.post', id=post.id) }}"><h3>{{ post.title }}</h3></a>
+                    </div>
+                    <div class="post-title">
+
+                    </div>
+                    <div class="post-author">
+                        {% if post.body_html %}
+                        <div class="post-body">{{ post.body_html | safe }}</div>
+                        {% else %}
+                        <div class="post-body">{{ post.body }}</div>
+                        {% endif %}
+                        <br />
+                        <p>Post by <a href="{{ url_for('main.user_profile', username=post.author.username) }}">
+                            {{ post.author.username }}</a>  {{ moment(post.timestamp).fromNow() }}
+                            <span>
+                                {% if current_user.username == post.author.username %}
+                                <a href="{{ url_for('auth.delete', id=post.id) }}">
+                                delete</a>
+                                {% endif %}
+                            </span>
+                        </p>
+
+
+                    </div>
+                </li>
+                </div>
+                <hr />
+            {% endfor %}
+        </ul>
+    </div>

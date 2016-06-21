@@ -5,9 +5,11 @@ from . import mail
 
 import os
 
+
 def send_mail_async(app, msg):
    with app.app_context():
         mail.send(msg) 
+
 
 def send_mail(to, subject, template, **kwargs):
     app = current_app._get_current_object()

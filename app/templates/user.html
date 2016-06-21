@@ -1,13 +1,125 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {{ super() }}
+    <style>
+        .profile {
+            border: 5px solid lightgoldenrodyellow;
+            width: 50%;
+            float: right;
+        }
+        .profile_pic {
+            width: 50%;
+            display: inline;
+            margin-left: 20px;
+        }
+        .profile_pic img {
+            border-style: solid;
+            border-color: #9C1A1C;
+            border-width: 2px;
+        }
+
+        .user_posts {
+            margin: 20px;
+            border: 2px solid seagreen;
+        }
+
+        .user_posts h3 {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
 {% block title %}
-    {{ super() }}{{ name }}
+    {{ super() }}{{ user.username }}
 {% endblock %}
 
 {% block content %}
+    {% if user == current_user or True %}
     <div class="container">
-        <div class="page-header">
-            <h1>hello, {{ name }}. Welcome to ChiHu.</h1>
+        <div>
+            <div class="page-header">
+            <h1 style="text-align: center;">Welcome, {{ user.username }}.</h1>
+            </div>
+
+            <div class="profile_container">
+            <div class="profile_pic">
+                <img src={{ user.gravatar(size=256) }} />
+            </div>
+
+            <div class="profile">
+            <ul>
+                <hr />
+            {% if user.name or user.location %}
+                <li>
+                <p>
+                <bold>User Name:  </bold> {% if user.username %}{{ user.username }}{% endif %}
+                </p>
+                <hr />
+                <p>
+                </li>
+                <li>
+                {% if user.location %}
+                    <bold>Location:  </bold><a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+                {% else %}
+                    <form method="post" action="{{ url_for('main.modify_city') }}">
+                        <input name="city" type="text" />
+                        <input type="submit" value="更新位置"/>
+                    </form>
+                    <hr>
+                {% endif %}
+                </p>
+                </li>
+                <hr />
+            {% endif %}
+            {% if current_user.is_administrator() %}
+                <li>
+                <p>
+                    <bold>Email:  </bold><a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                </p>
+                </li>
+            {% else %}
+                <li>
+                <p>
+                    <bold>Email:  </bold><a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                </p>
+                </li>
+            {% endif %}
+                <hr>
+            {% if user.about_me %}
+                <li>
+                <p>
+                    <bold>About Me:  </bold>{{ user.about_me }}
+                </p>
+                </li>
+            {% else %}
+                <p><bold>About Me:  </bold>say something...<p>
+            {% endif %}
+                <hr />
+                <li>
+                    <p>
+                    <bold>Member Since: </bold>{{ moment(user.member_since).format('L') }}.
+                    </p>
+                </li>
+                <li>
+                    <hr />
+                    <p>
+                    <bold>Last Seen: </bold>{{ moment(user.last_seen).fromNow() }}.
+                    </p>
+                </li>
+            </ul>
+            </div>
+            </div>
         </div>
     </div>
+
+    <div class="user_posts">
+        <div class="page-header">
+            <h3>Post</h3>
+        </div>
+        <div>
+            {% include '_posts.html' %}
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}

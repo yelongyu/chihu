@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <div class="page-header">
+    <h1>
+    You are not confirmed, 
+    click <a href={{ url_for('auth.resend_confirmation') }}>
+        here</a> to resend a confirmation email.
+    </h1>
+    </div>
+{% endblock %}

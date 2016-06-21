@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <div class="post-title">
+    <h3>{{ post.title }}</h3>
+    </div>
+
+    <div class="post-body">
+    {% if post.body_html %}
+        {{ post.body_html | safe }}
+    {% else %}
+        {{ post.body }}
+    {% endif %}
+    </div>
+{% endblock %}

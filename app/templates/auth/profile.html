@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block page_content %}
+    <ul>
+        <li>Name: {{ current_user.username }}</li>
+        <li>Email: {{ current_user.email }}</li>
+        <li>Message: {{ current_user.message }}</li>
+    </ul>
+{% endblock %}

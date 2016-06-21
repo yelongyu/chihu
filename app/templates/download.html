@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <a href="{{ url_for('main.download_file', filename='my_resume.pdf') }}" download="yelongyu_resume.pdf">resume
+    <span class="badge badge-notifications clicks" title="{{ count }} 次下载">{{ count }}</span>
+    </a>
+{% endblock %}

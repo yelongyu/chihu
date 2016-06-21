@@ -8,6 +8,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_ADMIN = os.environ.get('MAIL_ADMIN')
+    POST_PER_PAGE = os.environ.get('POST_PER_PAGE') or 5
 
     @staticmethod
     def init_app(app):
