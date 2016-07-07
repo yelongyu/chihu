@@ -5,13 +5,12 @@
     
     {% block head %}
         {{ super() }}
+        <meta charset="utf-8">
         <link rel="shortcut icon" href="{{ url_for('static', filename='chihu.ico') }}" type="image/x-icon" />
         <link rel="icon" href="{{ url_for('static', filename='chihu.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
         <style>
             body {
-               /* background-color: #72d4e6;
-                */
                 font-family: Monospaced, 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
             }
 
@@ -29,6 +28,35 @@
                 width: 150px;
                 height: 150px;
             }
+
+            .contact-logos {
+                padding-left: 0;
+
+            }
+
+            .contact-logo {
+                list-style-type: none;
+                display: inline;
+                padding: 5px;
+            }
+
+            .contact-logo img {
+                width: 25px;
+                height: 25px;
+            }
+
+            .contact-logo a {
+                text-decoration: none;
+            }
+
+            .recent-posts {
+                padding-left: 0;
+            }
+            .recent-post {
+                list-style-type: none;
+                padding: 5px 0;
+            }
+
         </style>
     {% endblock %}
 
@@ -51,15 +79,11 @@
                     <ul class="nav navbar-nav">
                         <li><a href="/">Home</a></li>
                     </ul>
-                    <ul class="nav navbar-nav">
-                        <li><a href={{ url_for('main.download') }}>Download</a></li>
-                    </ul>
-
                     {% if not current_user.is_authenticated %}
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ url_for('main.about_me') }}">About Me</a></li>
+                        <li><a href={{ url_for('main.download') }}>About Me</a></li>
                     </ul>
-                    {%  endif %}
+                    {% endif %}
 
                     <ul class="nav navbar-nav navbar-right">
                         <li>
@@ -105,12 +129,60 @@
              <div class="col-sm-3">
                  <div class="self-profile">
                      <h4>关于作者</h4>
-                    <img src="https://simuraepona.herokuapp.com/static/myself.png" />
+                    <img src="{{ url_for('static', filename='image/blue_sky.jpg') }}" />
                      <span><h4>yelongyu</h4><span>
                     <p>新手程序员，跑步爱好者。</p>
+                         <ul class="contact-logos">
+                             <li class="contact-logo">
+                                 <a href="http://www.weibo.com/yelongyu" target="_blank">
+                                    <img src="{{ url_for('static', filename='image/logos/weibo.png') }}" />
+                                 </a>
+                             </li>
+                             <li class="contact-logo">
+                                 <a href="tencent://message/?uin=522712829&Site=&Menu=yes" target="_blank">
+                                    <img src="{{ url_for('static', filename='image/logos/qq.png') }}" />
+                                 </a>
+                             </li>
+                             <li class="contact-logo">
+                                 <a href="https://github.com/yelongyu" target="_blank">
+                                    <img src="{{ url_for('static', filename='image/logos/github.png') }}" />
+                                 </a>
+                             </li>
+
+                             <li class="contact-logo">
+                                 <a href="mailto:yelongyu1024@gmail.com" target="_blank">
+                                    <img src="{{ url_for('static', filename='image/logos/email.png') }}" />
+                                 </a>
+                             </li>
+                         </ul>
                          <hr />
                          To be a programmer.
                          <hr />
+                 </div>
+
+                 <div class="recent-post-container">
+                    <h3>最近文章</h3>
+                     <ul class="recent-posts">
+                         {% for post in recent_posts %}
+                             <li class="recent-post">
+                                <a href="{{ url_for('main.post', id=post.id) }}">
+                                    {{ post.title }}
+                                </a>
+                            </li>
+                         {% endfor %}
+                     </ul>
+                 </div>
+
+                 <div class="post-tags">
+                     <h3>Tags</h3>
+                     <ul>
+                        <li></li>
+                     </ul>
+                 </div>
+
+                 <div class="recent-visitor">
+                     <h3>最近访客</h3>
+                     <span>hello, [{{ request.remote_addr.split('.')[0] }}.{{ request.remote_addr.split('.')[1] }}.*.*]</span>
                  </div>
              </div>
         </div>

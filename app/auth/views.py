@@ -1,6 +1,6 @@
 from flask import render_template, redirect, request, url_for, flash
 from . import auth
-from .form import LoginForm, RegisterForm, ChangePasswordForm, ChangeProfileForm
+from .form import LoginForm, RegisterForm, ChangePasswordForm, ChangeProfileForm, ResetPasswordForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from ..models import User, Post
 from .. import db
@@ -134,3 +134,18 @@ def delete(id):
     db.session.commit()
     flash('post deleted success!')
     return redirect(url_for('main.index'))
+
+@auth.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user is None:
+                flash('Wrong Email!')
+                form.email.data = ''
+            else:
+                token = user.generate_confirmation_token()
+                send_mail(user.email, 'Confirm Your Account', 'auth/email/confirm', user=current_user,
+                          token=token)
+                flash('Mail sent.')
+    return render_template('auth/reset_password.html', form=form)

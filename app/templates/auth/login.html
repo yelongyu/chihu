@@ -8,7 +8,10 @@
     <div class="container">
         <div class="col-md-4" id="login_form">
         {{ wtf.quick_form(form) }}
-        New User? <a href="{{ url_for('auth.register') }}">Click Here to Register</a>
+        <p>新用户？ <a href="{{ url_for('auth.register') }}">立即注册</a></p>
+            <p>
+                忘记密码？<a href="{{ url_for('auth.reset_password') }}">找回密码</a>
+            </p>
         </div>
     </div>
 {% endblock %}

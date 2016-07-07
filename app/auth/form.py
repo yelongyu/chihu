@@ -54,3 +54,8 @@ class ChangeProfileForm(Form):
     location = StringField('Location:', validators=[Length(0, 64)])
     about_me = StringField('About Me:', validators=[Length(0, 256)])
     submit = SubmitField('Update')
+
+
+class ResetPasswordForm(Form):
+    email = StringField('Email:', validators=[Required(), Length(1, 64), Email()])
+    submit = SubmitField('Submit:')

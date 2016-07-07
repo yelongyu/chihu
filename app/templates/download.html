@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
+{% block head %}
+    {{ super() }}
+<script>
+    function fresh_click() {
+        count_str = document.getElementById("click_count").innerHTML;
+        new_count = (parseInt(count_str) + 1).toString()
+        document.getElementById("click_count").innerHTML = new_count;
+        document.getElementById("click_count").setAttribute("title", new_count + "次下载");
+    }
+</script>
+{% endblock %}
+
 {% block page_content %}
+    <div class="page-header">
+    <h3>If you are interesting about me, here is my resume.</h3>
+    </div>
     <a href="{{ url_for('main.download_file', filename='my_resume.pdf') }}" download="yelongyu_resume.pdf">resume
-    <span class="badge badge-notifications clicks" title="{{ count }} 次下载">{{ count }}</span>
+    <span id="click_count" class="badge badge-notifications clicks" title="{{ count }} 次下载" onclick="fresh_click()">{{ count }}</span>
     </a>
 {% endblock %}
+
