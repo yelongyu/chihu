@@ -1,11 +1,13 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, g
 from . import auth
-from .form import LoginForm, RegisterForm, ChangePasswordForm, ChangeProfileForm, ResetPasswordForm
+from .form import LoginForm, RegisterForm, ChangePasswordForm, ChangeProfileForm, \
+    ResetPasswordForm, NewPasswordForm
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from ..models import User, Post
 from .. import db
 from ..email import send_mail
 import os
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -118,7 +120,7 @@ def update_profile():
         db.session.add(current_user)
         db.session.commit()
         flash('Update Profile Success!')
-        return redirect(url_for('main.profile', username=current_user.username))
+        return redirect(url_for('main.user_profile', username=current_user.username))
     form.username.data = current_user.username
     form.about_me.data = current_user.about_me
     form.location.data = current_user.location
@@ -143,9 +145,33 @@ def reset_password():
             if user is None:
                 flash('Wrong Email!')
                 form.email.data = ''
+                return redirect(url_for('auth.reset_password'))
             else:
                 token = user.generate_confirmation_token()
-                send_mail(user.email, 'Confirm Your Account', 'auth/email/confirm', user=current_user,
+                send_mail(user.email, 'Confirm Your Account', 'auth/email/reset_confirm', user=user,
                           token=token)
-                flash('Mail sent.')
+                g.user = user     # for reset password confirm
+                flash('Mail sent. Please checking your email to reset password.')
+                return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
+
+@auth.route('/reset_confirm/<token>')
+def reset_confirm(token):
+
+    if user.confirm(token):
+        return redirect(url_for('auth.new_password'))
+    else:
+        flash('The confirmation link is invalid or has expired.')
+    return redirect(url_for('main.index'))
+
+@auth.route('/new_password', methods=['GET', 'POST'])
+def new_password():
+    form = NewPasswordForm()
+    user = g.user
+    if form.validate_on_submit():
+        user.email = form.email.data
+        db.session.add(user)
+        db.session.commit()
+        flash('Password Reset Succeed!')
+        return redirect(url_for('auth.login'))
+    return render_template('new_password.html')

@@ -1,0 +1,68 @@
+body {
+    font-family: Serif, 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+}
+
+.footer {
+    height: 100px;
+    background-color: lightslategrey;
+    text-align: center;
+    margin-bottom: -20;
+    padding: 30px;
+    display: block;
+    overflow: auto;
+}
+
+.self-profile img {
+    width: 150px;
+    height: 150px;
+}
+
+.contact-logos {
+    padding-left: 0;
+
+}
+
+.contact-logo {
+    list-style-type: none;
+    display: inline;
+    padding: 5px;
+}
+
+.contact-logo img {
+    width: 25px;
+    height: 25px;
+}
+.contact-logo img:hover {
+    width: 35px;
+    height: 35px;
+}
+
+.contact-logo a {
+    text-decoration: none;
+}
+
+.recent-posts {
+    padding-left: 0;
+}
+.recent-post {
+    list-style-type: none;
+    padding: 5px 0;
+}
+
+.posts_container {
+    margin-top: 20px;
+}
+.post_roll {
+    margin: 20px;
+}
+li.post {
+    list-style-type: none;
+}
+.pagination_outer .pagination_container{
+    width: 100%;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+}

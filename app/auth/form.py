@@ -49,6 +49,14 @@ class ChangePasswordForm(Form):
     submit = SubmitField('Submit')
 
 
+class NewPasswordForm(Form):
+    new_password = PasswordField('new password:', validators=[Required(),
+                    EqualTo('new_password2', message='Password must match')])
+    new_password2 = PasswordField('confirm password:', validators=[Required()])
+
+    submit = SubmitField('Submit')
+
+
 class ChangeProfileForm(Form):
     username = StringField('User Name:', validators=[Length(0, 64)])
     location = StringField('Location:', validators=[Length(0, 64)])

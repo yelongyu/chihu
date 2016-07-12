@@ -8,26 +8,10 @@
 
 {% block head %}
     {{ super() }}
-    <style>
-        .posts_container {
-            margin-top: 20px;
-        }
-        .post_roll {
-            margin: 20px;
-        }
-        li.post {
-            list-style-type: none;
-        }
-        .pagination_outer .pagination_container{
-            width: 100%;
-            margin: 0 auto;
-        }
-    </style>
 {% endblock %}
 
 {% block page_header %}
     {{ super() }}
-
 {% endblock %}
 
 {% block page_content %}
@@ -46,5 +30,9 @@
             {{ macros.pagination_widget(pagination, 'main.index') }}
         </div>
     {% endif %}
+{% endblock %}
 
+{% block scripts %}
+    {{ super() }}
+    {{ pagedown.include_pagedown() }}
 {% endblock %}

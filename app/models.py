@@ -11,6 +11,9 @@ from datetime import datetime
 import hashlib
 from flask import request
 
+from markdown import markdown
+import bleach
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -52,6 +55,14 @@ class Permission:
     MODERATE_COMMENTS = 0x08
     ADMINISTER = 0x80
 
+
+class Follow(db.Model):
+    __tablename__ = 'follows'
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    datetime = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -66,6 +77,36 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     confirmed = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    followed = db.relationship('Follow',
+                               foreign_keys=[Follow.follower_id],
+                               backref=db.backref('follower', lazy='joined'),
+                               lazy='dynamic',
+                               cascade='all, delete-orphan')
+
+    followers = db.relationship('Follow',
+                                foreign_keys=[Follow.followed_id],
+                                backref=db.backref('followed', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
+
+    def follow(self, user):
+        if not self.is_following(user):
+            f = Follow(follower=self, followed=user)
+            db.session.add(f)
+
+    def unfollow(self):
+        f = self.followed.filter_by(followed_id=user.id).first()
+        if f:
+            db.session.delete(f)
+
+    def is_following(self, user):
+        return self.followed.filter_by(followed_id=user.id).first() is not None
+
+    def is_followed_by(self, user):
+        return self.followers.filter_by(
+            follower_id=user.id).first() is not None
+
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -165,8 +206,12 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), unique=True, index=True)
     body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    view_count = db.Column(db.Integer, default=0)
+    favor = db.Column(db.Integer, default=0)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    body_abtract = db.Column(db.Text)
 
     @staticmethod
     def generate_fake(count=100):
@@ -183,6 +228,17 @@ class Post(db.Model):
             db.session.add(p)
             db.session.commit()
 
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol',
+                        'ul', 'pre', 'strong', 'h1', 'h2', 'h3', 'p']
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'),
+                                                       tags=allowed_tags, strip=True))
+        target.body_abstract = bleach.linkify(bleach.clean(markdown(value, output_format='html'),
+                                                        tags=['p'], strip=True))
+
+db.event.listen(Post.body, 'set', Post.on_changed_body)
+
 
 class Click(db.Model):
     __tablename__ = 'click_count'
@@ -193,3 +249,24 @@ class Click(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class SiteData(db.Model):
+    __tablename__ = 'sitedata'
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    visitor_count = db.Column(db.Integer, default=0)
+
+
+
+
+# 2016.07.09 22:25 visitor statistic
+class StatisticVisitor(db.Model):
+    __tablename__ = 'statistic_visitor'
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    last_count = db.Column(db.DateTime, index=True)      # last count date
+    referred = db.Column(db.Text, default='No Referred')
+    agent = db.Column(db.String(64))
+    platform = db.Column(db.String(64))
+    version = db.Column(db.String(64))
+    ip = db.Column(db.String(64))
+    hits = db.Column(db.Integer, default=0)

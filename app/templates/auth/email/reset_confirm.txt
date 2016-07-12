@@ -1,0 +1,3 @@
+hello, {{ user.username }}:
+click here to confirm:
+{{ url_for('auth.reset_confirm', token=token, _external=True) }}

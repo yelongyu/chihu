@@ -1,0 +1,64 @@
+body {
+    font-family: Monospaced, 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+}
+
+.footer {
+    height: 100px;
+    background-color: deepskyblue;
+    text-align: center;
+    margin-bottom: -20;
+    padding: 30px;
+    display: block;
+    overflow: auto;
+    margin-top: 20px;
+}
+
+.self-profile img {
+    width: 150px;
+    height: 150px;
+}
+
+.contact-logos {
+    padding-left: 0;
+
+}
+
+.contact-logo {
+    list-style-type: none;
+    display: inline;
+    padding: 5px;
+}
+
+.contact-logo img {
+    width: 25px;
+    height: 25px;
+}
+
+.contact-logo a {
+    text-decoration: none;
+}
+
+.recent-posts {
+    padding-left: 0;
+}
+.recent-post {
+    list-style-type: none;
+    padding: 5px 0;
+}
+
+.post-head h3 {
+    display: inline;
+}
+
+p.post-favor-block {
+    text-align: right;
+}
+
+.posts {
+    list-style-type: none;
+    margin-top: 150px;
+}
+
+.delete-post.a {
+    text-decoration: none;
+}
