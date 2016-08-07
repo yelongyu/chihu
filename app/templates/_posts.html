@@ -1,69 +1,75 @@
-    <div class="posts_container">
-        <ul class="posts">
-            {% for post in posts %}
-                <div class="post_roll">
-                <li class="post">
-                    <div class="post-thumbnail post-head">
-                        <a href={{ url_for('main.user_profile', username=current_user.username) }}>
-                            <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
-                        </a>
-                        <a href="{{ url_for('main.post', id=post.id) }}"><h3>{{ post.title }}</h3></a>
-                    </div>
-                    <br />
-                    <div class="post-title">
-
-                    </div>
-                    <div class="post-author">
-                        {% if post.body_html %}
-                        <div class="post-body">{{ post.body_html | safe }}</div>
-                        {% else %}
-                        <div class="post-body">{{ post.body }}</div>
-                        {% endif %}
-                        <br />
-
-                        <ul class="list-inline post-info">
-                            <li class="post-author">
-                                <a href="{{ url_for('main.user_profile', username=post.author.username) }}">
-                                    <span class="label label-default">
-                                        {{ post.author.username }}
-                                    </span>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="posts_container">
+                <ul class="posts">
+                    {% for post in posts %}
+                        <div class="post_roll">
+                        <li class="post">
+                            <div class="post-thumbnail post-head">
+                                <a href={{ url_for('main.user_profile', username=current_user.username) }}>
+                                    <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
                                 </a>
-                            </li>
+                                <a href="{{ url_for('main.post', id=post.id) }}"><h3>{{ post.title }}</h3></a>
+                            </div>
+                            <br />
+                            <div class="post-title">
 
-                            <li class="post-view">
-                                <span class="label label-primary">
-                                    {{ post.view_count }} 浏览
-                                </span>
-                            </li>
+                            </div>
+                            <div class="post-author">
+                                {% if post.body_html %}
+                                <div class="post-body">{{ post.body_html | safe }}</div>
+                                {% else %}
+                                <div class="post-body">{{ post.body }}</div>
+                                {% endif %}
+                                <br />
 
-                            <li class="post-favor">
-                                    <span class="label label-success">
-                                        {{ post.favor }} 赞
-                                    </span>
-                            </li>
+                                <ul class="list-inline post-info">
+                                    <li class="post-author">
+                                        <a href="{{ url_for('main.user_profile', username=post.author.username) }}">
+                                            <span class="label label-default">
+                                                {{ post.author.username }}
+                                            </span>
+                                        </a>
+                                    </li>
 
-                            {% if current_user.username == post.author.username %}
-                            <li class="post-delete">
-                                    <a href="{{ url_for('auth.delete', id=post.id) }}">
-                                    <span class="label label-danger">
-                                        DELETE
-                                    </span>
-                                    </a>
-                            </li>
-                            {% endif %}
+                                    <li class="post-view">
+                                        <span class="label label-primary">
+                                            {{ post.view_count }} 浏览
+                                        </span>
+                                    </li>
 
-                            <li class="post-timestamp">
-                                <span class="label label-default">
-                                    {{ moment(post.timestamp).fromNow() }} @ {{ post.timestamp }}
-                                </span>
-                            </li>
-                        </ul>
+                                    <li class="post-favor">
+                                            <span class="label label-success">
+                                                {{ post.favor }} 赞
+                                            </span>
+                                    </li>
+
+                                    {% if current_user.username == post.author.username %}
+                                    <li class="post-delete" id="{{ post.id }}" onclick="return del_post()">
+                                            <a href="{{ url_for('auth.delete', id=post.id) }}">
+                                            <span class="label label-danger">
+                                                DELETE
+                                            </span>
+                                            </a>
+                                    </li>
+                                    {% endif %}
+
+                                    <li class="post-timestamp">
+                                        <span class="label label-default">
+                                            {{ moment(post.timestamp).fromNow() }} @ {{ post.timestamp }}
+                                        </span>
+                                    </li>
+                                </ul>
 
 
-                    </div>
-                </li>
-                </div>
-                <hr />
-            {% endfor %}
-        </ul>
+                            </div>
+                        </li>
+                        </div>
+                        <hr />
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
+</div>

@@ -1,10 +1,24 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.pyc
 *$py.class
+
+# my test file
+app/main/my_test.py
+app/templates/my_test.html
+
+# swap file
+*.swp
 
 # C extensions
 *.so
+
+# virtual environment
+venv
+
+# SQLite databases
+*.sqlite
 
 # configuration files
 *.conf

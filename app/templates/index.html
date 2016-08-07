@@ -8,6 +8,17 @@
 
 {% block head %}
     {{ super() }}
+    <script>
+        function del_post() {
+            if (confirm('确定删除吗？') == true) {
+                return true;
+            } else {
+                window.location = '/';
+                console.log('location:' + window.location);
+                return false;
+            }
+        }
+    </script>
 {% endblock %}
 
 {% block page_header %}
@@ -22,14 +33,24 @@
     </div>
     {% endif %}
 
-
-    {% include '_posts.html' %}
-
-    {% if pagination %}
-        <div class="pagination pagination_outer">
-            {{ macros.pagination_widget(pagination, 'main.index') }}
+    <div class="container">
+        <div class="row">
+                {% include '_posts.html' %}
         </div>
-    {% endif %}
+        <div class="row align-center">
+            <div class="col-md-9 col-md-offset-1">
+                    {% if pagination %}
+                    <div class="pagination pagination_outer">
+                        {{ macros.pagination_widget(pagination, 'main.index') }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="test">
+        <a href="{{ url_for('main.machine') }}">machine statistic</a>
+    </div>
 {% endblock %}
 
 {% block scripts %}

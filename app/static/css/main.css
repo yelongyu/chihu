@@ -1,6 +1,20 @@
-body {
-    font-family: Monospaced, 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+* {
+    margin: 0;
+    padding: 0;
 }
+
+body {
+    font-family: "Times New Roman", Monospaced, 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+.right-side {
+    position: fixed;
+}
+
 
 .footer {
     height: 100px;
@@ -11,6 +25,11 @@ body {
     display: block;
     overflow: auto;
     margin-top: 20px;
+}
+
+.navbar-color {
+    background-color: lightgreen;
+    border-width: 0px;
 }
 
 .self-profile img {
@@ -56,9 +75,31 @@ p.post-favor-block {
 
 .posts {
     list-style-type: none;
-    margin-top: 150px;
+}
+
+.posts_container {
+    margin: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
+}
+
+/* for every post */
+.post {
+    word-spacing: 1em;
+    letter-spacing: 2px;
+    line-height: 2em;
+}
+
+.post p {
+    text-indent: 2em;
 }
 
 .delete-post.a {
     text-decoration: none;
+}
+
+.machine_statistic td {
+    border-width: 2px;
+    border-style: solid;
+    border-color: blue;
+    border-collapse: collapse;
 }

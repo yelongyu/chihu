@@ -15,6 +15,11 @@ from markdown import markdown
 import bleach
 
 
+# fix the UnicodeEncodingError.
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
@@ -270,3 +275,25 @@ class StatisticVisitor(db.Model):
     version = db.Column(db.String(64))
     ip = db.Column(db.String(64))
     hits = db.Column(db.Integer, default=0)
+
+# 2016.07.21 machine statistic
+class Machine(db.Model):
+    __tablename__ = 'machine_statistic'
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    type = db.Column(db.String(64))
+    company = db.Column(db.String(64))
+    version = db.Column(db.String(64))
+    timestamp = db.Column(db.String(64))
+    userid = db.Column(db.String(64))
+    userpasswd = db.Column(db.String(64))
+    netcode = db.Column(db.String(64))
+    login_time = db.Column(db.DateTime, index=True)
+    ip = db.Column(db.String(64))
+    localip = db.Column(db.String(64))
+    gateway = db.Column(db.String(64))
+    wlanmac = db.Column(db.String(64))
+    wlanssid = db.Column(db.String(64))
+    wlanpasswd = db.Column(db.String(64))
+    webkey = db.Column(db.String(64))
+    openid = db.Column(db.String(64))
+

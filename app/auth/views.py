@@ -1,13 +1,47 @@
-from flask import render_template, redirect, request, url_for, flash, g
+#!/usr/bin/env python
+# -*- encoding:utf-8 -*-
+
+# learn from sqlmap source code
+# import one by one
+
+# flask built in
+from flask import render_template
+from flask import redirect
+from flask import request
+from flask import url_for
+from flask import flash
+from flask import g
+
 from . import auth
-from .form import LoginForm, RegisterForm, ChangePasswordForm, ChangeProfileForm, \
-    ResetPasswordForm, NewPasswordForm
-from flask.ext.login import login_user, logout_user, login_required, current_user
-from ..models import User, Post
+
+# form
+from .form import LoginForm
+from .form import RegisterForm
+from .form import ChangePasswordForm
+from .form import ChangeProfileForm
+from .form import ResetPasswordForm
+from .form import NewPasswordForm
+
+
+# login
+from flask.ext.login import login_user
+from flask.ext.login import logout_user
+from flask.ext.login import login_required
+from flask.ext.login import current_user
+
+
+from ..models import User
+from ..models import Post
+
 from .. import db
 from ..email import send_mail
+
 import os
 
+# fix UnicodeEncoding Error
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -134,7 +168,7 @@ def delete(id):
         abort(404)
     db.session.delete(post)
     db.session.commit()
-    flash('post deleted success!')
+    flash(u'文章删除成功!')
     return redirect(url_for('main.index'))
 
 @auth.route('/reset_password', methods=['GET', 'POST'])

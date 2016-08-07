@@ -1,15 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import render_template, session, redirect, url_for, flash, request, \
-    send_from_directory, abort, current_app, jsonify
-from flask.ext.login import login_required, current_user
+from flask import render_template
+from flask import session
+from flask import redirect
+from flask import url_for
+from flask import flash
+from flask import request
+from flask import send_from_directory
+from flask import abort
+from flask import current_app
+from flask import jsonify
+
+
+from flask.ext.login import login_required
+from flask.ext.login import current_user
 
 
 from . import main
 from .forms import PostForm
+
 from .. import db
-from ..models import User, Permission, Post, Click, SiteData, StatisticVisitor
+from ..models import User              # user table
+from ..models import Permission
+from ..models import Post
+from ..models import Click
+from ..models import SiteData
+from ..models import StatisticVisitor
+from ..models import Machine
+
 from ..email import send_mail
 
 import os
@@ -196,3 +215,4 @@ def followers(username):
     return render_template('followers.html', user=user,
                            title="Followers of", endpoint='main.followers',
                            pagination=pagination, follows=follows)
+

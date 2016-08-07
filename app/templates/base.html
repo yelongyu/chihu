@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="zh-CN">
 {% extends "bootstrap/base.html" %}
     {% block title %}
         ChiHu-
@@ -6,6 +8,8 @@
     {% block head %}
         {{ super() }}
         <meta charset="utf-8">
+        <!--禁止移动端触屏缩放-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link rel="shortcut icon" href="{{ url_for('static', filename='chihu.ico') }}" type="image/x-icon" />
         <link rel="icon" href="{{ url_for('static', filename='chihu.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
@@ -34,23 +38,22 @@
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" 
-                        data-toggle="collapse" data-target=
-                        ".navbar-collapse">
+                        data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span
                     </button>
-                    <a class="navbar-brand" href="/">Chihu</a>
+                    <a class="navbar-brand" href="{{ url_for('main.index') }}">Chihu</a>
                 </div>
 
                 <div class="navbar-collapse collapse" >
                     <ul class="nav navbar-nav">
-                        <li><a href="/">Home</a></li>
+                        <li><a href="{{ url_for('main.index') }}">首页</a></li>
                     </ul>
                     {% if not current_user.is_authenticated %}
                     <ul class="nav navbar-nav">
-                        <li><a href={{ url_for('main.download') }}>About Me</a></li>
+                        <li><a href={{ url_for('main.download') }}>关于我</a></li>
                     </ul>
                     {% endif %}
 
@@ -66,14 +69,14 @@
                                     <li><a href={{ url_for('auth.logout', _external=True) }} >注销</a></li>
                                 </ul>
                             {% else %}
-                                    <li><a href={{ url_for('auth.login') }}>Login</a></li>
+                                    <li><a href={{ url_for('auth.login') }}>登陆</a></li>
                             {% endif %}
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-    {% endblock %}
+    {% endblock %} {# end of block navbar #}
         
     {% block content %}
         <div class="container-message">
@@ -88,73 +91,74 @@
             {% block page_header %}
             {% endblock %}
         </div>
+
+
+        <div class="content-container">
         <div class="container">
-        <div class="row">
-             <div class="col-sm-9">
-            {% block page_content %}
-            {% endblock %}
+            <div class="row">
+                 <div class="col-sm-9">
+                    {% block page_content %}
+                    {% endblock %}
+                </div>
+                 <div class="col-sm-3">
+                 <!--   <div class="right-side"> -->
+                             <div class="self-profile">
+                                 <h4>关于作者</h4>
+                                <img src="{{ url_for('static', filename='image/blue_sky.jpg') }}" />
+                                 <span><h4>yelongyu</h4><span>
+                                <p>新手程序员，跑步爱好者。</p>
+                                     <ul class="contact-logos">
+                                         <li class="contact-logo">
+                                             <a href="http://www.weibo.com/yelongyu" target="_blank" title="微博">
+                                                <img src="{{ url_for('static', filename='image/logos/weibo.png') }}" />
+                                             </a>
+                                         </li>
+                                         <li class="contact-logo">
+                                             <a href="tencent://message/?uin=522712829&Site=&Menu=yes" target="_blank" title="QQ">
+                                                <img src="{{ url_for('static', filename='image/logos/qq.png') }}" />
+                                             </a>
+                                         </li>
+                                         <li class="contact-logo">
+                                             <a href="https://github.com/yelongyu" target="_blank" title="Github">
+                                                <img src="{{ url_for('static', filename='image/logos/github.png') }}" />
+                                             </a>
+                                         </li>
+
+                                         <li class="contact-logo">
+                                             <a href="mailto:yelongyu1024@gmail.com" target="_blank" title="E-Mail">
+                                                <img src="{{ url_for('static', filename='image/logos/email.png') }}" />
+                                             </a>
+                                         </li>
+                                     </ul>
+                                     <hr />
+                                     To be a programmer.
+                                     <hr />
+                             </div>
+
+                             <div class="recent-post-container">
+                                <h3>最近文章</h3>
+                                 <ul class="recent-posts">
+                                     {% for post in recent_posts %}
+                                         <li class="recent-post">
+                                            <a href="{{ url_for('main.post', id=post.id) }}">
+                                                {{ post.title }}
+                                            </a>
+                                        </li>
+                                     {% endfor %}
+                                 </ul>
+                                 <hr />
+                             </div>
+
+                                 <div class="post-tags">
+                                     <h3>Tags</h3>
+                                     <ul>
+                                        <li></li>
+                                     </ul>
+                                 </div>
+              <!--              </div> -->
+                 </div>
             </div>
-
-             <div class="col-sm-3">
-                 <div class="self-profile">
-                     <h4>关于作者</h4>
-                    <img src="{{ url_for('static', filename='image/blue_sky.jpg') }}" />
-                     <span><h4>yelongyu</h4><span>
-                    <p>新手程序员，跑步爱好者。</p>
-                         <ul class="contact-logos">
-                             <li class="contact-logo">
-                                 <a href="http://www.weibo.com/yelongyu" target="_blank" title="微博">
-                                    <img src="{{ url_for('static', filename='image/logos/weibo.png') }}" />
-                                 </a>
-                             </li>
-                             <li class="contact-logo">
-                                 <a href="tencent://message/?uin=522712829&Site=&Menu=yes" target="_blank" title="QQ">
-                                    <img src="{{ url_for('static', filename='image/logos/qq.png') }}" />
-                                 </a>
-                             </li>
-                             <li class="contact-logo">
-                                 <a href="https://github.com/yelongyu" target="_blank" title="Github">
-                                    <img src="{{ url_for('static', filename='image/logos/github.png') }}" />
-                                 </a>
-                             </li>
-
-                             <li class="contact-logo">
-                                 <a href="mailto:yelongyu1024@gmail.com" target="_blank" title="E-Mail">
-                                    <img src="{{ url_for('static', filename='image/logos/email.png') }}" />
-                                 </a>
-                             </li>
-                         </ul>
-                         <hr />
-                         To be a programmer.
-                         <hr />
-                 </div>
-
-                 <div class="recent-post-container">
-                    <h3>最近文章</h3>
-                     <ul class="recent-posts">
-                         {% for post in recent_posts %}
-                             <li class="recent-post">
-                                <a href="{{ url_for('main.post', id=post.id) }}">
-                                    {{ post.title }}
-                                </a>
-                            </li>
-                         {% endfor %}
-                     </ul>
-                     <hr />
-                 </div>
-
-                 <div class="post-tags">
-                     <h3>Tags</h3>
-                     <ul>
-                        <li></li>
-                     </ul>
-                 </div>
-             </div>
         </div>
-        </div>
-
-        <div class="footer">
-            <span>yelongyu @ 2016</span>
         </div>
     {% endblock %}
 
@@ -162,3 +166,4 @@
         {{ super() }}
         {{ moment.include_moment() }}
     {% endblock %}
+</html>
