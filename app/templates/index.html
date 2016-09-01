@@ -3,7 +3,7 @@
 {% import "_macros.html" as macros %}
 
 {% block title %}
-    {{ super() }}Index
+    {{ super() }}与你一起吃
 {% endblock %}
 
 {% block head %}
@@ -25,32 +25,115 @@
     {{ super() }}
 {% endblock %}
 
-{% block page_content %}
+{% block content %}
     {{ super() }}
-    {% if current_user.is_authenticated %}
-    <div> 
-    {{ wtf.quick_form(form) }}
-    </div>
-    {% endif %}
+<div class="content-container">
+        <div class="container">
+            <div class="row">
+                 <div class="col-sm-9">
 
-    <div class="container">
-        <div class="row">
-                {% include '_posts.html' %}
-        </div>
-        <div class="row align-center">
-            <div class="col-md-9 col-md-offset-1">
-                    {% if pagination %}
-                    <div class="pagination pagination_outer">
-                        {{ macros.pagination_widget(pagination, 'main.index') }}
-                    </div>
-                {% endif %}
+                        {{ super() }}
+                        {% if current_user.is_authenticated %}
+                        <div>
+                        {{ wtf.quick_form(form) }}
+                        </div>
+                        {% endif %}
+                         <div class="container">
+                            <div class="row">
+                                    {% include '_posts.html' %}
+                            </div>
+                            <div class="row align-center">
+                                <div class="col-md-9">
+                                        {% if pagination %}
+                                        <div class="pagination pagination_outer">
+                                            {{ macros.pagination_widget(pagination, 'main.index') }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                         </div>
+
+                </div>
+                 <div class="col-sm-3">
+                 <!--   <div class="right-side"> -->
+                             <div class="self-profile">
+                                 <h4>关于作者</h4>
+                                <img src="{{ url_for('static', filename='image/blue_sky.jpg') }}" />
+                                 <span><h4>yelongyu</h4><span>
+                                <p>新手程序员，跑步爱好者。</p>
+                                     <ul class="contact-logos">
+                                         <li class="contact-logo">
+                                             <a href="http://www.weibo.com/yelongyu" target="_blank" title="微博">
+                                                <img src="{{ url_for('static', filename='image/logos/weibo.png') }}" />
+                                             </a>
+                                         </li>
+                                         <li class="contact-logo">
+                                             <a href="tencent://message/?uin=522712829&Site=&Menu=yes" target="_blank" title="QQ">
+                                                <img src="{{ url_for('static', filename='image/logos/qq.png') }}" />
+                                             </a>
+                                         </li>
+                                         <li class="contact-logo">
+                                             <a href="https://github.com/yelongyu" target="_blank" title="Github">
+                                                <img src="{{ url_for('static', filename='image/logos/github.png') }}" />
+                                             </a>
+                                         </li>
+
+                                         <li class="contact-logo">
+                                             <a href="mailto:yelongyu1024@gmail.com" target="_blank" title="E-Mail">
+                                                <img src="{{ url_for('static', filename='image/logos/email.png') }}" />
+                                             </a>
+                                         </li>
+                                     </ul>
+                                     <hr />
+                                     To be a programmer.
+                                     <hr />
+                             </div>
+
+                             <div class="recent-post-container">
+                                <h3>最近文章</h3>
+                                 <ul class="recent-posts">
+                                     {% for post in recent_posts %}
+                                         <li class="recent-post">
+                                            <a href="{{ url_for('main.post', id=post.id) }}">
+                                                {{ post.title }}
+                                            </a>
+                                        </li>
+                                     {% endfor %}
+                                 </ul>
+                                 <hr />
+                             </div>
+                                 <div class="recent-comment-container">
+                                     <h3>最近评论</h3>
+                                     <ul class="recent-comments">
+                                         {% for comment in recent_comments %}
+                                         <li class="recent-comment">
+                                            <a href="{{ url_for('main.post', id=comment.post_id) }}">
+                                                {{ comment.author.username }}
+                                            </a>
+                                             :&nbsp;&nbsp;{{ comment.body }}
+
+                                        </li>
+                                         {% endfor %}
+                                     </ul>
+                                 </div>
+                                <hr />
+                                 <div class="post-tags">
+                                     <h3>分类</h3>
+                                     <ul>
+                                         {% for category in categories %}
+                                            <div class="post-tag" style="display: inline-block;margin: 5px">
+                                                <a class="btn btn-info" href="{{ url_for('main.category_post', id=category.id) }}">
+                                                    {{ category.name }}
+                                                </a>
+                                            </div>
+                                         {% endfor %}
+                                     </ul>
+                                 </div>
+              <!--              </div> -->
+                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="test">
-        <a href="{{ url_for('main.machine') }}">machine statistic</a>
-    </div>
+        </div>
 {% endblock %}
 
 {% block scripts %}

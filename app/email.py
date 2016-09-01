@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from flask.ext.mail import Message
 from threading import Thread
-from flask import current_app, render_template
+from flask import current_app
+from flask import render_template
 from . import mail
 
 import os

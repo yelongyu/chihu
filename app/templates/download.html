@@ -11,12 +11,18 @@
 </script>
 {% endblock %}
 
-{% block page_content %}
-    <div class="page-header">
-    <h3>If you are interesting about me, here is my resume.</h3>
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="page-header">
+                <h3 style="text-align: center;">失业求职中，求勾搭~</h3>
+                </div>
+                <a href="{{ url_for('main.download_file', filename='my_resume.pdf') }}" download="yelongyu_resume.pdf">简历点这里
+                <span id="click_count" class="badge badge-notifications clicks" title="{{ count }} 次下载" onclick="fresh_click()">{{ count }}</span>
+                </a>
+            </div>
+        </div>
     </div>
-    <a href="{{ url_for('main.download_file', filename='my_resume.pdf') }}" download="yelongyu_resume.pdf">resume
-    <span id="click_count" class="badge badge-notifications clicks" title="{{ count }} 次下载" onclick="fresh_click()">{{ count }}</span>
-    </a>
 {% endblock %}
 

@@ -2,32 +2,6 @@
 
 {% block head %}
     {{ super() }}
-    <style>
-        .profile {
-            border: 5px solid lightgoldenrodyellow;
-            width: 50%;
-            float: right;
-        }
-        .profile_pic {
-            width: 50%;
-            display: inline;
-            margin-left: 20px;
-        }
-        .profile_pic img {
-            border-style: solid;
-            border-color: #9C1A1C;
-            border-width: 2px;
-        }
-
-        .user_posts {
-            margin: 20px;
-            border: 2px solid seagreen;
-        }
-
-        .user_posts h3 {
-            text-align: center;
-        }
-    </style>
 {% endblock %}
 
 {% block title %}
@@ -37,116 +11,123 @@
 {% block content %}
     {% if user == current_user or True %}
     <div class="container">
-        <div>
+        <div class="profile">
             <div class="page-header">
-            <h1 style="text-align: center;">Welcome, {{ user.username }}.</h1>
+            <h1 style="text-align: center;">欢迎回来, {{ user.username }}.</h1>
             </div>
+            <p>基本资料-------------------------------------------------------
+            {% if user == current_user %}
+                <a class="btn btn-danger" href="{{ url_for('main.edit_profile') }}">编辑资料</a>
+            {% endif %}
+            </p>
+            <p>基本资料-------------------------------------------------------
+            <div>
+                <a class="btn btn-success" href="{{ url_for('main.create_category') }}">新增分类</a>
+            </div>
+
+                {% if user.can(Permission.FOLLOW) %}
+                <a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">编辑资料[管理员]</a>
+            {% endif %}
+            </p>
 
             <div class="profile_container">
-            <div class="profile_pic">
-                <img src={{ user.gravatar(size=256) }} />
-            </div>
-
-            <div class="profile">
-            <ul>
-                <hr />
-            {% if user.name or user.location %}
-                <li>
-                <p>
-                <bold>User Name:  </bold> {% if user.username %}{{ user.username }}{% endif %}
-                </p>
-                <hr />
-                <p>
-                </li>
-                <li>
-                {% if user.location %}
-                    <bold>Location:  </bold><a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
-                {% else %}
-                    <form method="post" action="{{ url_for('main.modify_city') }}">
-                        <input name="city" type="text" />
-                        <input type="submit" value="更新位置"/>
-                    </form>
-                    <hr>
-                {% endif %}
-                </p>
-                </li>
-                <hr />
-            {% endif %}
-            {% if current_user.is_administrator() %}
-                <li>
-                <p>
-                    <bold>Email:  </bold><a href="mailto:{{ user.email }}">{{ user.email }}</a>
-                </p>
-                </li>
-            {% else %}
-                <li>
-                <p>
-                    <bold>Email:  </bold><a href="mailto:{{ user.email }}">{{ user.email }}</a>
-                </p>
-                </li>
-            {% endif %}
-                <hr>
-            {% if user.about_me %}
-                <li>
-                <p>
-                    <bold>About Me:  </bold>{{ user.about_me }}
-                </p>
-                </li>
-            {% else %}
-                <p><bold>About Me:  </bold>say something...<p>
-            {% endif %}
-                <hr />
-                <li>
-                    <p>
-                    <bold>Member Since: </bold>{{ moment(user.member_since).format('L') }}.
-                    </p>
-                </li>
-                <li>
-                    <hr />
-                    <p>
-                    <bold>Last Seen: </bold>{{ moment(user.last_seen).fromNow() }}.
-                    </p>
-                </li>
-                {% if current_user.can(Permission.FOLLOW) and user != current_user %}
-                    {% if not current_user.is_following(user) %}
-                        <a href="{{ url_for('main.follow', username=user.username) }}" class="btn btn-primary">
-                        Follow
+                <div class="profile_pic" style="float: left;">
+                    <img src={{ user.gravatar(size=256) }} />
+                </div>
+                <div class="profile">
+                    <ul>
+                        <hr />
+                        {% if user.name or user.location %}
+                            <li>
+                            <p>
+                            <bold>真实姓名:  </bold> {% if user.realname %}{{ user.realname }}{% endif %}
+                            </p>
+                            <hr />
+                            <p>
+                            </li>
+                            <li>
+                            {% if user.location %}
+                                <bold>城市:  </bold><a href="http://maps.baidu.com/?q={{ user.location }}">{{ user.location }}</a>
+                            {% else %}
+                                <form method="post" action="{{ url_for('main.modify_city') }}">
+                                    <input name="city" type="text" />
+                                    <input type="submit" value="更新位置"/>
+                                </form>
+                                <hr>
+                            {% endif %}
+                            </p>
+                            </li>
+                            <hr />
+                        {% endif %}
+                        {% if current_user.is_administrator() %}
+                            <li>
+                            <p>
+                                <bold>邮箱:  </bold><a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                            </p>
+                            </li>
+                        {% else %}
+                            <li>
+                            <p>
+                                <bold>邮箱:  </bold><a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                            </p>
+                            </li>
+                        {% endif %}
+                            <hr>
+                        {% if user.about_me %}
+                            <li>
+                            <p>
+                                <bold>一句话介绍:  </bold>{{ user.about_me }}
+                            </p>
+                            </li>
+                        {% else %}
+                            <p><bold>一句话介绍:  </bold>say something...<p>
+                        {% endif %}
+                        <hr />
+                        <li>
+                            <p>
+                            <bold>注册时间: </bold>{{ moment(user.member_since).format('L') }}.
+                            </p>
+                        </li>
+                        <li>
+                            <hr />
+                            <p>
+                            <bold>上次登录: </bold>{{ moment(user.last_seen).fromNow() }}.
+                            </p>
+                            <hr />
+                        </li>
+                        {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+                            {% if not current_user.is_following(user) %}
+                                <a href="{{ url_for('main.follow', username=user.username) }}" class="btn btn-primary">
+                                关注
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('main.unfollow', username=user.username) }}" class="btn btn-default">
+                                取消关注
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                        <a href="{{ url_for('main.followers', username=user.username) }}">
+                            关注者: <span class="badge">{{ user.followers.count() }}</span>
                         </a>
-                    {% else %}
-                        <a href="{{ url_for('main.unfollow', username=user.username) }}" class="btn btn-default">
-                        Unfollow
+                        <a href="{{ url_for('main.followed_by', username=username) }}">
+                            正在关注: <span class="badge">{{ user.followed.count() }}</span>
                         </a>
-                    {% endif %}
-                {% endif %}
-                <a href="{{ url_for('main.followers', username=user.username) }}">
-                    Followers: <span class="badge">{{ user.followers.count() }}</span>
-                </a>
-                <a href="{{ url_for('main.followed_by', username=username) }}">
-                    Following: <span class="badge">{{ user.followed.count() }}</span>
-                </a>
 
-                {% if current_user.is_authenticated and user != current_user and
-                        user.is_following(current_user) %}
-                    | <span class="label label-default">Follows you</span>
-                {% endif %}
-
-
-                <li>
-                    <hr />
-                    <p>
-                    <bold>: </bold>{{ moment(user.last_seen).fromNow() }}.
-                    </p>
-                </li>
-
-            </ul>
-            </div>
+                        {% if current_user.is_authenticated and user != current_user and
+                                user.is_following(current_user) %}
+                            | <span class="label label-default">Follows you</span>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
+
+
     <div class="user_posts">
         <div class="page-header">
-            <h3>Post</h3>
+            <h3></h3>
         </div>
         <div>
             {% include '_posts.html' %}

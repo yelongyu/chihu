@@ -1,69 +1,79 @@
+# -*- encoding:utf-8 -*-
+
 from flask.ext.wtf import Form
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import Required, Length, Email, Regexp, EqualTo, \
-    ValidationError
+
+from wtforms import StringField
+from wtforms import PasswordField
+from wtforms import BooleanField
+from wtforms import SubmitField
+
+from wtforms.validators import Required
+from wtforms.validators import Length
+from wtforms.validators import Email
+from wtforms.validators import Regexp
+from wtforms.validators import EqualTo
+from wtforms.validators import ValidationError
 
 from ..models import User
 
 
+# 登陆表单
 class LoginForm(Form):
-    email = StringField('Email', validators=[Required(), Length(1, 64), 
-                        Email()])
-    password = PasswordField('Password', validators=[Required()])
-    remember_me = BooleanField('Keep me logged in')
-    submit = SubmitField('Log In')
+    email = StringField('邮箱', validators=[Required(), Length(1, 64), Email()])
+    password = PasswordField('密码', validators=[Required()])
+    remember_me = BooleanField('保持登录状态')
+    submit = SubmitField(u'登陆')
 
 
+# 注册表单
 class RegisterForm(Form):
-    email = StringField('email', validators=[Required(), Length(1, 64), 
+    email = StringField('邮箱', validators=[Required(), Length(1, 64),
                         Email()])
-    username = StringField('username', validators=[Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
-                        'Usernames must have only letters, ' \
-                        'numbers, dots or underscores')])
-    password = PasswordField('password', validators=[Required(), \
-             EqualTo('password2', message='Passwords must match.')])
-    password2 = PasswordField('confirm password', validators=[Required()])
-    
-    submit = SubmitField('Register')
+    username = StringField('用户名', validators=[Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
+                        '用户名只能包含数字、字母、下划线！')])
+    password = PasswordField('密码', validators=[Required(), \
+             EqualTo('password2', message='两次输入的密码不匹配！')])
+    password2 = PasswordField('请再次确认密码', validators=[Required()])
+    submit = SubmitField('注册')
 
+    # 自定义验证函数 validate_开头加字段名
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already register.')
+            raise ValidationError('该邮箱已注册！')
         
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
-            raise ValidationError('Username already in use.')
-
-    def validate_password(self, field):
-        if '1' in field.data:
-            raise ValidationError('Password can not contain 1! so, this is \
-                                    just a test.')
+            raise ValidationError('该用户名已被使用！')
 
 
+# 密码修改表单
 class ChangePasswordForm(Form):
-    old_password = StringField('old password:', validators=[Required()])
-    new_password = PasswordField('new password:', validators=[Required(), 
-                    EqualTo('new_password2', message='Password must match')])
-    new_password2 = PasswordField('confirm password:', validators=[Required()])
-
-    submit = SubmitField('Submit')
-
-
-class NewPasswordForm(Form):
-    new_password = PasswordField('new password:', validators=[Required(),
-                    EqualTo('new_password2', message='Password must match')])
-    new_password2 = PasswordField('confirm password:', validators=[Required()])
-
-    submit = SubmitField('Submit')
+    old_password = PasswordField('密码:', validators=[Required()])
+    password = PasswordField('新密码:', validators=[Required(),
+                    EqualTo('password2', message='Password must match')])
+    password2 = PasswordField('请重新确认新密码:', validators=[Required()])
+    submit = SubmitField('提交')
 
 
-class ChangeProfileForm(Form):
-    username = StringField('User Name:', validators=[Length(0, 64)])
-    location = StringField('Location:', validators=[Length(0, 64)])
-    about_me = StringField('About Me:', validators=[Length(0, 256)])
-    submit = SubmitField('Update')
+# 密码重置邮箱提交表单
+class ResetPasswordRequestForm(Form):
+    email = StringField('请输入账号邮箱:', validators=[Required(), Length(1, 64), Email()])
+    submit = SubmitField('提交')
 
 
+# 密码重置表单
 class ResetPasswordForm(Form):
-    email = StringField('Email:', validators=[Required(), Length(1, 64), Email()])
-    submit = SubmitField('Submit:')
+    email = StringField('邮箱账号:', validators=[Required(), Length(1, 64), Email()])
+    password = PasswordField('请输入新密码:', validators=[Required(),
+                    EqualTo('password2', message='Password must match')])
+    password2 = PasswordField('请确认新密码:', validators=[Required()])
+    submit = SubmitField('提交')
+
+
+# 邮箱修改表单
+class ChangeEmailForm(Form):
+    email = StringField('请输入新的邮件地址:', validators=[Required(), Length(1, 64), Email()])
+    password = PasswordField('密码:', validators=[Required()])
+    submit = SubmitField('提交:')
+
+

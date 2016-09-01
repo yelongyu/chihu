@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from flask import Blueprint
 from ..models import Permission
 
 main = Blueprint('main', __name__)
 
-from . import views, errors
+from . import views, errors, my_test
 
 
 # app_context_processor

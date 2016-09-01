@@ -6,11 +6,16 @@
                     {% for post in posts %}
                         <div class="post_roll">
                         <li class="post">
-                            <div class="post-thumbnail post-head">
+                            <div class="post-thumbnail post-head" style="display: inline-block;">
                                 <a href={{ url_for('main.user_profile', username=current_user.username) }}>
                                     <img class="img-rounded profile-thumbnail" src="{{ post.author.gravatar(size=40) }}">
                                 </a>
                                 <a href="{{ url_for('main.post', id=post.id) }}"><h3>{{ post.title }}</h3></a>
+                            </div>
+                            <div class="post-timestamp" style="float: right;">
+                                        <span class="label label-default">
+                                            {{ moment(post.timestamp).format('LLLL') }}
+                                        </span>
                             </div>
                             <br />
                             <div class="post-title">
@@ -33,33 +38,43 @@
                                         </a>
                                     </li>
 
-                                    <li class="post-view">
-                                        <span class="label label-primary">
-                                            {{ post.view_count }} 浏览
-                                        </span>
-                                    </li>
-
-                                    <li class="post-favor">
-                                            <span class="label label-success">
-                                                {{ post.favor }} 赞
+                                        {% if post.category %}
+                                        <li class="post-category">
+                                            <span class="label label-info">
+                                                <a href="{{ url_for('main.category') }}">{{ post.category.name }}</a>
                                             </span>
-                                    </li>
+                                        </li>
+                                        {% endif %}
 
-                                    {% if current_user.username == post.author.username %}
-                                    <li class="post-delete" id="{{ post.id }}" onclick="return del_post()">
-                                            <a href="{{ url_for('auth.delete', id=post.id) }}">
-                                            <span class="label label-danger">
-                                                DELETE
+                                        <li class="post-view">
+                                            <span class="label label-primary">
+                                                {{ post.view_count }} 浏览
                                             </span>
-                                            </a>
-                                    </li>
-                                    {% endif %}
+                                        </li>
 
-                                    <li class="post-timestamp">
-                                        <span class="label label-default">
-                                            {{ moment(post.timestamp).fromNow() }} @ {{ post.timestamp }}
-                                        </span>
-                                    </li>
+                                        <li class="post-comment">
+                                            <span class="label label-primary">
+                                                {{ post.comments.count() }} 评论
+                                            </span>
+                                        </li>
+
+                                        <li class="post-favor">
+                                                <span class="label label-success">
+                                                    {{ post.favor }} 赞
+                                                </span>
+                                        </li>
+
+                                        {% if current_user.username == post.author.username %}
+                                        <li class="post-delete" id="{{ post.id }}" onclick="return del_post()">
+                                                <a href="{{ url_for('main.delete', id=post.id) }}">
+                                                <span class="label label-danger">
+                                                    删除
+                                                </span>
+                                                </a>
+                                        </li>
+                                        {% endif %}
+
+
                                 </ul>
 
 

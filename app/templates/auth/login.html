@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block page_content %}
-    <div class="page-header">
-        <h1>Login</h1>
-    </div>
+{% block content %}
+    {{ super() }}
     <div class="container">
-        <div class="col-md-4" id="login_form">
-        {{ wtf.quick_form(form) }}
-        <p>新用户？ <a href="{{ url_for('auth.register') }}">立即注册</a></p>
-            <p>
-                忘记密码？<a href="{{ url_for('auth.reset_password') }}">找回密码</a>
-            </p>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="page-header">
+                    <h1 style="text-align: center;">登陆</h1>
+                </div>
+                {{ wtf.quick_form(form) }}
+                <p>
+                    <a href="{{ url_for('auth.request_reset_password') }}">忘记密码？</a>
+                </p>
+            </div>
         </div>
     </div>
 {% endblock %}
