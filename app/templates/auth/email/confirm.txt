@@ -1,3 +1,3 @@
 hello, {{ user.username }}:
-click here to confirm:
+点击下面的链接即可激活邮箱哦，若非本人请忽略:
 {{ url_for('auth.confirm', token=token, _external=True) }}

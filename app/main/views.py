@@ -145,8 +145,10 @@ def post_favor():
 @main.route('/post/category')
 def category():
     categories = Category.query.all()
-
-    return render_template('category.html', categories=categories)
+    posts = Post.query.all()
+    return render_template('category.html',
+                           categories=categories,
+                           posts=posts)
 
 # 帖子归类
 @main.route('/post/category/<int:id>')
@@ -174,6 +176,7 @@ def create_category():
 
 # 用户资料
 @main.route('/user/<username>')
+@login_required
 def user_profile(username):
     user = User.query.filter_by(username=username).first()
     if user is None:

@@ -36,7 +36,7 @@ sys.setdefaultencoding('utf-8')
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# table roles
+# 用户角色表
 class Role(db.Model):
     __tablename__ = 'roles'
     id = db.Column(db.Integer, primary_key=True)
@@ -84,7 +84,7 @@ class Follow(db.Model):
     followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     datetime = db.Column(db.DateTime, default=datetime.utcnow)
 
-# table users
+# 用户表
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)

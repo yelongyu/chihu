@@ -2,6 +2,11 @@
 
 {% block head %}
     {{ super() }}
+    <style>
+        .profile_pic {
+            margin: 10px;
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -15,20 +20,22 @@
             <div class="page-header">
             <h1 style="text-align: center;">欢迎回来, {{ user.username }}.</h1>
             </div>
-            <p>基本资料-------------------------------------------------------
-            {% if user == current_user %}
-                <a class="btn btn-danger" href="{{ url_for('main.edit_profile') }}">编辑资料</a>
-            {% endif %}
-            </p>
-            <p>基本资料-------------------------------------------------------
-            <div>
-                <a class="btn btn-success" href="{{ url_for('main.create_category') }}">新增分类</a>
-            </div>
 
-                {% if user.can(Permission.FOLLOW) %}
-                <a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">编辑资料[管理员]</a>
-            {% endif %}
-            </p>
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                {% if user == current_user %}
+                    <a class="btn btn-info" href="{{ url_for('main.edit_profile') }}">编辑资料</a>
+                {% endif %}
+                </div>
+                 <div class="btn-group" role="group">
+                    {% if user.can(Permission.FOLLOW) %}
+                        <a class="btn btn-danger" href="{{ url_for('main.edit_profile_admin', id=user.id) }}">编辑资料[管理员]</a>
+                    {% endif %}
+                </div>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-success" href="{{ url_for('main.create_category') }}">新增分类</a>
+                </div>
+            </div>
 
             <div class="profile_container">
                 <div class="profile_pic" style="float: left;">

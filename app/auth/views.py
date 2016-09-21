@@ -70,7 +70,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
-        send_mail(user.email, 'Confirm Your Account', 'auth/email/confirm', user=user, token=token)
+        send_mail(user.email, '邮箱激活', 'auth/email/confirm', user=user, token=token)
         flash('注册成功！请登录。')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)

@@ -39,11 +39,17 @@
                                     </li>
 
                                         {% if post.category %}
-                                        <li class="post-category">
-                                            <span class="label label-info">
-                                                <a href="{{ url_for('main.category') }}">{{ post.category.name }}</a>
-                                            </span>
-                                        </li>
+                                            <li class="post-category">
+                                                <span class="label label-info">
+                                                    <a href="{{ url_for('main.category') }}">{{ post.category.name }}</a>
+                                                </span>
+                                            </li>
+                                        {% else %}
+                                            <li class="post-category">
+                                                <span class="label label-info">
+                                                    <a href="{{ url_for('main.category') }}">未分类</a>
+                                                </span>
+                                            </li>
                                         {% endif %}
 
                                         <li class="post-view">
